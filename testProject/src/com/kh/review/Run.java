@@ -1,10 +1,9 @@
 package com.kh.review;
 import java.util.*;
 
-
 public class Run {
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+//		Scanner sc = new Scanner(System.in);
 		
 //		int num = sc.nextInt();
 		
@@ -153,10 +152,18 @@ public class Run {
 //		
 //		System.out.print(list.get(1));
 		
-		Human jiwon = new Human("choi", 21, "201111-xxxxxxx", 'm');
-		Book[] jiwonBookList = jiwon.getBookList();
-		jiwonBookList[0] = new Book("꿈꾸는 다락방");
-		String jiwonName = jiwon.getName();
-		System.out.print(jiwonName);
+//		Human jiwon = new Human("choi", 21, "201111-xxxxxxx", 'm');
+//		Book[] jiwonBookList = jiwon.getBookList();
+//		jiwonBookList[0] = new Book("꿈꾸는 다락방");
+//		String jiwonName = jiwon.getName();
+//		System.out.print(jiwonName);
+		
+		
+		Libray libray = new Libray();
+		libray.mainMenu();
+		//libray객체 안에 createBook 메서드를 작성해보세요.
+//		Libray libray = new Libray();
+//		libray.createBook();
+		
 	}
 }
