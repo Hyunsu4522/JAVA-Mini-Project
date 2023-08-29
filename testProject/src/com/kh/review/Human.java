@@ -7,6 +7,7 @@ public class Human {
 	private int age; //나이
 	private String residentNumber; //주민등록번호
 	private char gender; //성별 f => 여자 or m => 남자
+	private int rentBookCode;
 //	private Book[] bookList;
 	
 	public Human() {
@@ -19,6 +20,7 @@ public class Human {
 		this.age = age;
 		this.residentNumber = residentNumber;
 		this.gender = gender;
+		this.rentBookCode = 0;
 //		bookList = new Book[10];
 	}
 	
@@ -60,9 +62,19 @@ public class Human {
 		this.key = key;
 	}
 
+	public int getRentBookCode() {
+		return rentBookCode;
+	}
+
+	public void setRentBookCode(int rentBookCode) {
+		this.rentBookCode = rentBookCode;
+	}
+
 	@Override
 	public String toString() {
-		return this.key + "\t" + this.name + "\t" + this.residentNumber + "\t" + this.age + "\t" + this.gender;
+		return this.key + "\t" + this.name + "\t" + this.residentNumber + "\t"
+				+ this.age + "\t" + this.gender + "\t" 
+				+ (this.rentBookCode == 0 ? "도서 대여 가능" :(this.rentBookCode + "번 대여중"));
 	}
 	
 //	public String getFutureAge () {
