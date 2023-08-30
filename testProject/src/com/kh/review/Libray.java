@@ -42,16 +42,17 @@ public class Libray {
 			sc.nextLine();
 			switch(number) {
 				case 1:
-					printBookList();
+					printBookList(bookList);
 					bookList.add(this.createBook());
 					break;
 				case 2:
 					rentBook();
 					break;
 				case 3:
+					returnBook();
 					break;
 				case 4:
-					printHumanList();
+					printHumanList(humanList);
 					humanList.add(this.createHuman());
 				case 9:
 					System.out.println("프로그램을 종료합니다.");
@@ -65,15 +66,32 @@ public class Libray {
 	public void rentBook() {
 		//대여가능한 책이 있는지 검사
 		//없으면 없다고 하고 리턴
+		boolean isBookCheck = false; //북을 빌릴 수 있는지 검사 결과값
+		boolean isHumanCheck = false; // 북을 빌리 수 있는 사람이 있는지 검사 결과값
+		for (Book b : bookList) {
+	        if (b.getIsRent()) {
+	        	isBookCheck = true;
+	            break;
+	        }
+		 }
+		
+		for (Human h : humanList) {
+	        if (h.getRentBookCode() == 0) {
+	        	isHumanCheck = true;
+	            break;
+	        }
+		 }
 		//대여를 할 수 있는 회원이 있는지 검사
 		//없으면 없다고 하고 리턴
-		if(bookList.size() == 0) {
+		
+		if(bookList.size() == 0 || isBookCheck) {
 			System.out.println("도서등록이 필요합니다.");
 			return;
-		}else if (humanList.size() == 0) {
+		}else if (humanList.size() == 0 || isHumanCheck) {
 			System.out.println("회원등록이 필요합니다.");
 			return;
 		}
+		
 		
 		//대여하는 사람을 선택하는 코드
 		Human selectHuman = selectHuman();
@@ -89,20 +107,43 @@ public class Libray {
 	
 	//도서를 반납하기 위한 메서드
 	public void returnBook() {
-		//책을 빌린사람들을 추린다.
+//		while (true) {
+		
 		ArrayList<Human> tmpHumanList = new ArrayList<>();
+		//책을 빌린사람들을 추린다.
 		//humanList => 전체검사하면서 책을 대여한 사람만 tmpHumanList 추가
+		for (Human man : humanList) {
+		    if (man.getRentBookCode() != 0) {
+		        tmpHumanList.add(man);
+		    }
+		}
+		if(tmpHumanList.size() == 0) {
+			System.out.println("반납할 책이 없습니다.");
+			return;
+		}
+		printHumanList(tmpHuamnList);
 		//어떤 사람의 책을 반납할지 선택해준다.
+//		System.out.println("대여 중인 회원 목록:");
+//		for (int i = 0; i < humanList.size(); i++) {
+//		    System.out.println(humanList.get(i).getName());
+//		    
+//		}
 	
-		//어떤책을 반납해야하는지 책을 가지고온다.
+		//어떤책을 반납해야하는지 책을 가지고온다.	
+//		 for (Book book : bookList) {
+//	        if (book.getCode() == ) {
+//	            book.setRent(true); 
+//	            break;
+//	        }
+//		 }
 	}
-	
+//}
 	//human을 선택해서 반환해주는 메서드
 	public Book selectBook() {
 		Book selectBook = null;
 		while(selectBook == null) {
 			//bookList출력
-			printBookList();
+			printBookList(bookList);
 			System.out.print("어떤 책을 대여하시겠습니까?(도서코드입력) : ");
 			//도서코드 입력받기
 			int selectCode = sc.nextInt();
@@ -126,7 +167,7 @@ public class Libray {
 		return selectBook;
 	}
 	
-	public void printHumanList() {
+	public void printHumanList(ArrayList<Human> tmpList) {
 		System.out.println("----------------------------");
 		if(humanList.size() > 0) {
 			System.out.println("ID \t 이름 \t 생년월일 \t 나이 \t 성별 \t 도서대여현황");
@@ -139,18 +180,12 @@ public class Libray {
 		System.out.println("----------------------------");
 	}
 	
-//	public boolean isRentBookCheck() {
-//		boolean isRent = true;
-//		if(bookList.size() == 0) {
-//			isRent = false;
-//		}
-//	}
 	
 	//human을 선택해서 반환해주는 메서드
 	public Human selectHuman() {
 		Human selectHuman = null;
 		while(selectHuman == null) {
-			printHumanList();
+			printHumanList(humanList);
 			System.out.print("어떤 회원으로 대여하시겠습니까?(id입력) : ");
 			int selectkey = sc.nextInt();
 			sc.nextLine();
@@ -170,11 +205,11 @@ public class Libray {
 	
 
 	//bookList의 목록을 보여주는 메서드
-	public void printBookList() {
+	public void printBookList(ArrayList<Book> tmpList) {
 		System.out.println("----------------------------");
-		if(bookList.size() > 0) {
+		if(tmpList.size() > 0) {
 			System.out.println("번호 \t 제목 \t 작가 \t 대여여부");
-			for(Book book : bookList) {
+			for(Book book : tmpList) {
 				System.out.println(book.toString());
 			}
 		}else {
