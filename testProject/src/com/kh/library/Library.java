@@ -2,8 +2,6 @@ package com.kh.library;
 
 import java.util.*;
 
-import com.kh.hw.employee.Employee;
-
 // 회원생성, 수정, 삭제
 // 도서 등록,수정,삭제
 // 및 도서대여관리
@@ -44,22 +42,28 @@ public class Library {
 			// 원하는 서비스 번호 입력받기
 			number = sc.nextInt();
 			sc.nextLine();
+			
 			switch (number) {
 				case 1:
+					//도서등록
 					printBookList(bookList);
 					bookList.add(this.createBook());
 					break;
 				case 2:
+					//도서대여
 					rentBook();
 					break;
 				case 3:
+					//도서반납
 					returnBook();
 					break;
 				case 4:
+					//회원등록
 					printHumanList(humanList);
 					humanList.add(this.createHuman());
 					break;
 				case 9:
+					//프로그램 종료
 					System.out.println("프로그램을 종료합니다.");
 					break;
 				default:
@@ -70,10 +74,10 @@ public class Library {
 
 	// 도서 대여를 위한 메서드
 	public void rentBook() {
-		//************************************************
 		//대여가능한 책이 있는지 검사
-		boolean isBookCheck = false; // true이면 책이 하나라도 대여가능상태 flase => 책을 하나도 빌릴 수 없는 상태
+		boolean isBookCheck = false; // true이면 책이 하나라도 대여가능상태 false => 책을 하나도 빌릴 수 없는상태
 		boolean isHumanCheck = false; // true라면 책을 빌릴 수 있는 사람이 한명이라도 있다. false => 책을 빌릴 수 있는 사람이 한명도 없다.
+		
 		for (Book b : bookList) {
 			if (b.getIsRent()) {
 				isBookCheck = true;
@@ -88,11 +92,12 @@ public class Library {
 				break;
 			}
 		}
-
-		if (bookList.size() == 0 || !isBookCheck) {//책 자체가 없거나 또는 빌릴 수 있는 책이 하나도 없
+		
+		
+		if (bookList.size() == 0 || !isBookCheck) {//책 자체가 없거나 또는 빌릴 수 있는 책이 하나도 없다
 			System.out.println("도서등록이 필요합니다.");
 			return;
-		} else if (humanList.size() == 0 || !isHumanCheck) {//책을 빌릴 사람이 아예 없거나 또는 책을 빌릴 수 있는 사람이 한명도 없다.
+		} else if (humanList.size() == 0 || !isHumanCheck) { //책을 빌릴 사람이 아얘 없거나 또는 책을 빌릴 수 있는 사람이 한명도 없다.
 			System.out.println("회원등록이 필요합니다.");
 			return;
 		}
@@ -131,38 +136,48 @@ public class Library {
 		//tmpHumanList담긴 사람들을 보여준다.
 		printHumanList(tmpHumanList);
 		
-		
-		
 		Human selectHuman = null;
 		while(selectHuman == null) {
 			//리스트에 있는 사람중 어떤 사람의 책을 반납할지 id를 입력받는다.
-			System.out.print("어떤 사람의 책을 반납하시겠습니까? (id입력) : ");
+			System.out.println("어떤 사람의 책을 반납하시겠습니까? (id입력) : ");
+			
 			int selectID = sc.nextInt();
 			//해당 사람을 selectHuman이라는 변수를 만들어 담아준다.
 			
-			for(Human man : tmpHumanList) {
-				if(man.getKey() == selectID) {
+			for (Human man : tmpHumanList) {
+				if (man.getKey() == selectID) {
 					selectHuman = man;
 				}
 			}
-			if(selectHuman == null) {
+			
+			if (selectHuman == null) {
 				System.out.println("입력하신 id와 일치하는 회원이 없습니다.");
 			}
 		}
-		//selectHuman <- 빌린사람, 반납할사람 -> 반납할 책의 코드를 가지고있겠네
+		
+		//selectHuman // <-빌린사람, 반납할사람 -> 반납할 책의 코드를 가지고있겠네
 		//해당 사람이 빌린 책을 rentBookCode를 이용해서 bookList에서 찾아준다.
 		//해당 책을 selectBook이라는 변수를 만들어 담아준다.
-		
+		Book selectBook = null;
+		for (Book b : bookList) {
+			if (selectHuman.getRentBookCode() == b.getCode()) {
+				selectBook = b;
+			}
+		}
 		//selectHuman의 rentBookCode를 0으로 변경
 		//selectBook의 isRent를 true로 변경
 		//반납이 완료되었습니다. 출력
-
+		selectHuman.setRentBookCode(0);
+		selectBook.setIsRent(true);
+		System.out.print("반납이 완료되었습니다.");
+		
 	}
 	//human을 선택해서 반환해주는 메서드
 	public Human selectHuman() {
 		Human selectHuman = null;
-		while(selectHuman == null) {//selectHuman에 어떤 값이 들어올 때까지 반복이구나
+		while(selectHuman == null) { //selectHuman에 어떤 값이 들어올 때까지 반복이구나
 			printHumanList(humanList);
+			
 			System.out.print("어떤 회원으로 대여하시겠습니까?(id입력) : ");
 			int selectKey = sc.nextInt();
 			sc.nextLine();
