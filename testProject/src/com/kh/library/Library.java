@@ -34,7 +34,8 @@ public class Library {
 			System.out.println("1. 도서등록");
 			System.out.println("2. 도서대여");
 			System.out.println("3. 도서반납");
-			System.out.println("4. 회원등록");
+			System.out.println("4. 도서삭제");
+			System.out.println("5. 회원등록");
 			System.out.println("9. 프로그램 종료");
 			System.out.println("============================");
 			System.out.println("원하시는 서비스 번호를 입력하세요 : ");
@@ -58,6 +59,10 @@ public class Library {
 					returnBook();
 					break;
 				case 4:
+					//도서삭제
+					deleteBook();
+					break;
+				case 5:
 					//회원등록
 					printHumanList(humanList);
 					humanList.add(this.createHuman());
@@ -119,7 +124,6 @@ public class Library {
 	
 	//도서를 반납하기위한 메서드
 	public void returnBook() {
-		//************************************************
 		//책을 빌린사람들을 추린다.
 		// humanList => 전체검사하면서 책을 대여한 사람만 tmpHumanList 추가 
 		ArrayList<Human> tmpHumanList = new ArrayList<>();
@@ -154,24 +158,62 @@ public class Library {
 				System.out.println("입력하신 id와 일치하는 회원이 없습니다.");
 			}
 		}
-		
+		//내가 작성한 코드
 		//selectHuman // <-빌린사람, 반납할사람 -> 반납할 책의 코드를 가지고있겠네
 		//해당 사람이 빌린 책을 rentBookCode를 이용해서 bookList에서 찾아준다.
 		//해당 책을 selectBook이라는 변수를 만들어 담아준다.
-		Book selectBook = null;
-		for (Book b : bookList) {
-			if (selectHuman.getRentBookCode() == b.getCode()) {
-				selectBook = b;
-			}
-		}
+//		Book selectBook = null;
+//		for (Book book : bookList) {
+//			if (selectHuman.getRentBookCode() == book.getCode()) {
+//				selectBook = book;
+//			}
+//		}
 		//selectHuman의 rentBookCode를 0으로 변경
 		//selectBook의 isRent를 true로 변경
 		//반납이 완료되었습니다. 출력
-		selectHuman.setRentBookCode(0);
-		selectBook.setIsRent(true);
-		System.out.print("반납이 완료되었습니다.");
+//		selectHuman.setRentBookCode(0);
+//		selectBook.setIsRent(true);
+//		System.out.print("반납이 완료되었습니다.");
 		
+		for (Book book : bookList) {
+			if (selectHuman.getRentBookCode() == book.getCode()) {
+				book.setIsRent(true);
+				selectHuman.setRentBookCode(0);				
+				System.out.print("반납이 완료되었습니다.");
+				break;
+			}
+		}
+
 	}
+	
+	
+	//도서를 삭제하기 위한 메서드
+	public void deleteBook() {
+		//도서목록을 보여준다.
+		//삭제할 도서코드를 입력받는다.
+		printBookList(bookList);
+		System.out.println("어떤 책을 삭제하시겠습니까?(도서코드입력) : ");
+		int selectCode = sc.nextInt();
+		sc.nextLine();
+		
+		for (int i = 0; i < bookList.size(); i++) {
+			Book book = bookList.get(i);
+			if (selectCode == book.getCode()) {
+				if (!book.getIsRent()) {
+					System.out.println("대여중인 도서는 삭제가 불가합니다");
+					return;
+				} else {
+					this.bookList = null;
+				}
+			}
+		}
+		//해당 도서가 대여중이면 "대여중인 도서는 삭제가 불가합니다" 하고 return;
+		//해당도서가 대여중이 아니면 도서목록에서 해당도서 삭제
+		}
+	
+	
+	
+	
 	//human을 선택해서 반환해주는 메서드
 	public Human selectHuman() {
 		Human selectHuman = null;
